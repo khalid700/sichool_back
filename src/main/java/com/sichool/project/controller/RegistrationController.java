@@ -29,9 +29,11 @@ public class RegistrationController {
 
     @PostMapping("/login")
     public Mono<ResponseEntity<Token>> login(@RequestBody AuthRequest ar) {
-        return registrationService.findUserByEmail(ar.getUsername())
+        return registrationService.findUserByEmail(ar.getEmail())
                 .filter(userDetails -> passwordEncoder.encode(ar.getPassword()).equals(userDetails.getPassword()))
                 .map(userDetails -> ResponseEntity.ok(new Token(jwtUtil.generateToken(userDetails))))
                 .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
+
+
 }

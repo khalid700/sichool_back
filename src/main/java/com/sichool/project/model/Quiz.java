@@ -19,24 +19,22 @@ import java.util.UUID;
 @Document(collection = "quiz")
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+
 public class Quiz {
     @Id
     private String id;
     private String name;
     private String description;
     private String courseId;
+    private String proofId;
     private Set<String> attachmentsUrls;
-    private Boolean status;
 
     public Quiz(@Nullable @JsonProperty("name") String name,
                 @Nullable @JsonProperty("description") String description,
-                @Nullable Boolean status,
-                @Nullable @JsonProperty("attachments_url") Set<String > attachmentsUrls)
+                @Nullable @JsonProperty("attachmentsUrls") Set<String > attachmentsUrls)
     {
         this.name = name;
         this.description = description;
-        this.status = status;
         this.attachmentsUrls = attachmentsUrls;
         this.id = UUID.randomUUID().toString();
     }

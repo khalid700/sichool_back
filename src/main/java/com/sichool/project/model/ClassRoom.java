@@ -18,17 +18,18 @@ import java.util.UUID;
 @Document(collection =  "classrooms")
 @AllArgsConstructor
 @Data
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+
 @NoArgsConstructor
 public class ClassRoom {
-    public String id;
-    public String name;
-    public Set<String> studentIds;
-    public LocalDateTime createAt;
+    private String id;
+    private String name;
+    private Set<String> proofIds;
+    private Set<String> studentIds;
+    private LocalDateTime createAt;
 
     @JsonCreator
     public ClassRoom(@Nullable @JsonProperty("name") String name,
-                     @Nullable @JsonProperty("student_ids") Set<String> studentIds) {
+                     @Nullable @JsonProperty("studentIds") Set<String> studentIds) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.studentIds = studentIds;

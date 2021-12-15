@@ -1,5 +1,6 @@
 package com.sichool.project.config;
 
+import com.sichool.project.model.Account;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -47,16 +48,16 @@ public class JWTUtil {
         return expiration.before(new Date());
     }
 
-    public String generateToken(UserDetails user) {
+    public String generateToken(Account user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", user.getAuthorities());
-        return doGenerateToken(claims, user.getUsername());
+        return doGenerateToken(claims, user.getId());
     }
 
     private String doGenerateToken(Map<String, Object> claims, String username) {
         Long expirationTimeLong = Long.parseLong(expirationTime); //in second
         final Date createdDate = new Date();
-        final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong * 1000);
+        final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong * 10000);
 
         return Jwts.builder()
                 .setClaims(claims)

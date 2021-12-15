@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.Nullable;
 
@@ -16,21 +17,32 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+
 @Document(collection = "courses")
 public class Course {
+    @Id
     private  String id;
     private String name;
+    private String imageUrl;
     private String description;
+    private String subject;
+    private String proofId;
+    private String  classRoomId;
     private Set<String> attachmentsUrls;
     private LocalDateTime createdAt;
 
     public Course(@Nullable @JsonProperty("name") String name,
                   @Nullable @JsonProperty("description") String description,
-                  @Nullable @JsonProperty("attachments_urls") Set<String> attachmentsUrls) {
+                  @Nullable @JsonProperty("subject") String subject,
+                  @Nullable @JsonProperty("imageUrl")  String imageUrl,
+                  @Nullable @JsonProperty("classRoomId") String classRoomId,
+                  @Nullable @JsonProperty("attachmentsUrls") Set<String> attachmentsUrls) {
         this.id = UUID.randomUUID().toString();
         this.createdAt = LocalDateTime.now();
         this.name = name;
+        this.imageUrl = imageUrl;
+        this.classRoomId = classRoomId;
+        this.subject = subject;
         this.description = description;
         this.attachmentsUrls = attachmentsUrls;
     }

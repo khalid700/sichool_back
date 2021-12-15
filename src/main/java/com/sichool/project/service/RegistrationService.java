@@ -17,10 +17,15 @@ public class RegistrationService {
 
     public Mono<Account> registerUser(Account account)
     {
+        System.out.println(account);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
-        return fetchByEmail(account.getEmail())
-                .switchIfEmpty(Mono.just(account))
-                .flatMap(accountRepository::save);
+        return fetchByEmail(account.getEmail()).hasElement()
+                .flatMap(is ->{
+                    if (is)
+                       return Mono.error(  new IllegalAccessException("email used"));
+                    else
+                        return accountRepository.save(account);
+                });
     }
 
     public Mono<Account> fetchByEmail(String email)
@@ -28,7 +33,7 @@ public class RegistrationService {
         return accountRepository.findAccountByEmail(email);
     }
 
-    public Mono<UserDetails> findUserByEmail(String email)
+    public Mono<Account> findUserByEmail(String email)
     {
         return accountRepository.findByEmail(email);
     }
