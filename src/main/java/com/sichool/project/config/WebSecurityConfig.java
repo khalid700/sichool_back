@@ -39,6 +39,7 @@ public class WebSecurityConfig {
                 .pathMatchers("/swagger-ui.html").permitAll()
                 .pathMatchers("/webjars/**").permitAll()
                 .pathMatchers("/v3/**").permitAll()
+                .pathMatchers("/attachments/download/**").permitAll()
                 .anyExchange().authenticated()
                 .and().build();
     }

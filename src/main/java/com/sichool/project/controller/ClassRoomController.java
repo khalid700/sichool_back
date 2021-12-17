@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -28,19 +29,29 @@ public class ClassRoomController {
         return classRoomService.create(classRoom);
     }
 
-    @PostMapping("link/student/{classId}")
+    @PostMapping(value = "link/student/{classId}")
     @PreAuthorize("hasAuthority('student:linkToClass')")
-    public Mono<ClassRoom> linkStudentToClassRoom(@PathVariable("classId") String classId, Set<String> studentIds)
+    public Mono<ClassRoom> linkStudentToClassRoom(@PathVariable("classId") String classId,
+                                                  @RequestBody ClassRoom c)
     {
-        return classRoomService.addStudentsToClassRoom(classId, studentIds);
+        return classRoomService.addStudentsToClassRoom(classId, c.getStudentIds());
     }
 
-    @PostMapping("link/proof/{classId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Mono<ClassRoom> linkProofToClassRoom(@PathVariable("classId") String classId, Set<String> proofIds)
+    @PostMapping(value = "link/proof/{classId}")
+
+    public Mono<ClassRoom> linkProofToClassRoom(@PathVariable("classId") String classId,
+                                                @RequestBody ClassRoom c)
     {
-        return classRoomService.addProofToClassRoomById(classId, proofIds);
+        return classRoomService.addProofToClassRoomById(classId, c.getProofIds());
     }
+
+
+    @GetMapping("fetch/by/id/{id}")
+    public Mono<ClassRoom> getClassRoomById(@PathVariable("id") String id)
+    {
+        return classRoomService.getById(id);
+    }
+
 
     @GetMapping("fetch/all")
     @PreAuthorize("hasAuthority('class:read')")
@@ -50,6 +61,15 @@ public class ClassRoomController {
     {
         Pageable paging = PageRequest.of(page, size);
         return classRoomService.findAllMyClassRooms(authentication, paging);
+    }
+    @GetMapping("fetch/all/and/courses")
+    @PreAuthorize("hasAuthority('class:read')")
+    public Flux<ClassRoom> findAllByWithCourses(@RequestParam(defaultValue = "0") Integer page,
+                                               @RequestParam(defaultValue = "10") Integer size,
+                                               Authentication authentication)
+    {
+        Pageable paging = PageRequest.of(page, size);
+        return classRoomService.findAllMyClassRoomsInjectCourses(authentication, paging);
     }
 
 

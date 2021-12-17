@@ -7,10 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -29,6 +31,8 @@ public class Course {
     private String proofId;
     private String  classRoomId;
     private Set<String> attachmentsUrls;
+    @Transient
+    private List<Quiz> quizList;
     private LocalDateTime createdAt;
 
     public Course(@Nullable @JsonProperty("name") String name,
